@@ -60,16 +60,26 @@ const authentication = async (req, res, next) => {
 // ?? New Middlewares: multer to handle file upload from client
 const multer = require("multer");
 
-// Now we will use diskStorage to store the file
-// File will be stored at /uploads folder
+// ?? Now we will use diskStorage to store the file
+// ?? File will be stored at /uploads folder
 const upload = multer({
-  dest: "uploads/",
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "./uploads");
+    },
+    // We will use Date.now() to make sure the file name is unique
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
 });
 
 const middlewareUpload = upload.single("file");
 // End of Assumption
 
 // Main file start here
+// ?? We will need to use "path" for more concise path
+const path = require("path");
 const cors = require("cors");
 const express = require("express");
 const { Credential, Todo } = require("./models");
@@ -84,7 +94,7 @@ app.use(express.json());
 
 // ?? Since we're using multer to /uploads folder
 // ?? We need to open the folder to public and serve it as static
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // routes
 app.get("/", (req, res) => {
@@ -176,6 +186,25 @@ app.post(
     try {
       console.log(req.file);
       console.log(req.body);
+
+      // We will get the name from req.body
+      const { name } = req.body;
+      // We will get the path from req.file
+      const { path } = req.file;
+
+      // We will create new todo with name, completed: false, and image_url: path
+      const newTodo = await Todo.create({
+        name,
+        completed: false,
+        image_url: path,
+      });
+
+      // We will send the response
+      res.status(201).json({
+        statusCode: 201,
+        message: "Todo created",
+        data: newTodo,
+      });
     } catch (err) {
       next(err);
     }
