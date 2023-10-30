@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Belajar Authentication</title>
+  </head>
+  <body>
+    <!-- We will make the UI here, directly -->
+    <section
+      id="app"
+      class="min-w-100 min-h-[100dvh] flex flex-col gap-4 items-center justify-center bg-slate-100"
+    >
+      <!-- Form Login -->
+      <form
+        id="formLogin"
+        class="flex flex-col gap-4 border-2 p-4 border-emerald-300/50 rounded md:min-w-[25vw]"
+      >
+        <h1 class="text-2xl font-bold text-center">Login Form</h1>
+        <input
+          class="py-2 px-4 rounded"
+          type="email"
+          name="email"
+          id="formLoginEmail"
+          placeholder="Email"
+          required
+        />
+        <input
+          class="py-2 px-4 rounded"
+          type="password"
+          name="password"
+          id="formLoginPassword"
+          placeholder="Password"
+          required
+        />
+        <button
+          class="py-2 px-4 rounded bg-blue-200 hover:bg-blue-400 hover:text-white transition-colors duration-300"
+          type="submit"
+        >
+          Submit
+        </button>
+        <a
+          href="#"
+          id="toRegister"
+          class="text-center underline text-blue-400 hover:text-blue-600 transition-colors duration-300 mx-auto"
+          >or do you want to Register?</a
+        >
+      </form>
+      <!-- End of Form Login -->
+
+      <!-- Form Register -->
+      <form
+        id="formRegister"
+        class="flex flex-col gap-4 border-2 p-4 border-rose-300/50 rounded md:min-w-[25vw]"
+      >
+        <h1 class="text-2xl font-bold text-center">Register Form</h1>
+        <input
+          class="py-2 px-4 rounded"
+          type="text"
+          name="username"
+          id="formRegisterUsername"
+          placeholder="Username"
+          required
+        />
+        <input
+          class="py-2 px-4 rounded"
+          type="email"
+          name="email"
+          id="formRegisterEmail"
+          placeholder="Email"
+          required
+        />
+        <input
+          class="py-2 px-4 rounded"
+          type="password"
+          name="password"
+          id="formRegisterPassword"
+          placeholder="Password"
+          required
+        />
+        <button
+          class="py-2 px-4 rounded bg-blue-200 hover:bg-blue-400 hover:text-white transition-colors duration-300"
+          type="submit"
+        >
+          Submit
+        </button>
+        <a
+          href="#"
+          id="toLogin"
+          class="text-center underline text-blue-400 hover:text-blue-600 transition-colors duration-300 mx-auto"
+          >or do you want to Login?</a
+        >
+      </form>
+      <!-- End of Form Register -->
+
+      <!-- Private Route (Authenticated) -->
+      <section
+        id="privateRoute"
+        class="flex flex-col gap-4 border-2 p-4 border-sky-300/50 rounded md:min-w-[25vw]"
+      >
+        <h1 class="text-2xl font-bold text-center">Private Route</h1>
+        <nav class="flex flex-row justify-between items-center">
+          <span id="userProfile"></span>
+          <a
+            href="#"
+            class="underline underline-offset-4 text-blue-400 hover:text-blue-600 transition-colors duration-300"
+            id="doLogout"
+            >Logout</a
+          >
+        </nav>
+
+        <!-- ?? Adding new Element: Form Add Todo -->
+        <!-- Form Add Todo -->
+        <!-- ! Remember to set enctype to multipart/form-data -->
+        <form
+          id="formAddTodo"
+          class="flex flex-col mx-auto gap-4"
+          enctype="multipart/form-data"
+        >
+          <h2 class="text-xl font-bold text-center">Add Todo</h2>
+          <input
+            class="py-2 px-4 rounded"
+            type="text"
+            name="name"
+            id="formAddTodoName"
+            placeholder="Add Todo"
+            required
+          />
+          <input
+            class="py-2 px-4 rounded"
+            type="file"
+            name="image"
+            id="formAddTodoImage"
+            accept="image/*"
+            required
+          />
+          <button
+            class="py-2 px-4 rounded bg-blue-200 hover:bg-blue-400 hover:text-white transition-colors duration-300"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+        <!-- End of Form Add Todo -->
+
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Completed?</th>
+            </tr>
+          </thead>
+          <tbody id="privateTableBody"></tbody>
+        </table>
+      </section>
+      <!-- End of Private Route (Authenticated) -->
+    </section>
+    <!-- End of Direct Make UI -->
+
+    <!-- Included script (DO NOT MODIFY !) -->
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

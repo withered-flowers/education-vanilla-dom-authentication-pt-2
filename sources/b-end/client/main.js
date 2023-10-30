@@ -150,9 +150,15 @@ const renderHomePage = async () => {
 
     // Map todos to table rows
     const todos = data.data.todos.map((todo) => {
+      // ?? Now we need to add logic to handle "uploads/xxx.png" from local server
+      // ?? and from "https://some-other-places.com/path/to/image"
       return `<tr>
         <td>${todo.id}</td>
-        <td><img src='${todo.image_url}' /></td>
+        <td><img class='w-32 h-32' src='${
+          todo.image_url.startsWith("uploads")
+            ? BASE_URL + "/" + todo.image_url
+            : todo.image_url
+        }' /></td>
         <td>${todo.name}</td>
         <td class="text-center">${todo.completed ? `[v]` : `[x]`}</td>
       </tr>`;
@@ -178,6 +184,40 @@ const postAddTodo = async (e) => {
   const image = document.querySelector("#formAddTodoImage").files[0];
 
   console.log(name, image);
+
+  // Since this will be a Promise based operation using async/await,
+  // we need to use try-catch
+  try {
+    // Since the data will include image, we need to use FormData API
+    // https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+
+    // Create new FormData
+    const formData = new FormData();
+
+    // Append the data needed to FormData
+    formData.append("name", name); // this will be included in req.body
+
+    // The multer will look for "file" key, we need to append it
+    formData.append("file", image); // this will be included in req.file
+
+    // Wiring to POST /private endpoint on server
+    const { data } = await axios.post(`${BASE_URL}/private`, formData, {
+      // We need to pass the token to the server
+      // via Authorization header with Bearer token
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Let's see the result !
+    console.log(data);
+
+    // After adding new todo, we need to re-render the homepage
+    // Since this code is using vanilla DOM, we need to re-render it manually
+    renderHomePage();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const initialize = () => {
